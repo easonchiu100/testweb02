@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>100 個禮物靈感 · 婚禮 / 節慶 / 季節 / 活動</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", "PingFang TC", "Microsoft JhengHei", sans-serif;
+    background: #faf7f2;
+    color: #2b2b2b;
+    line-height: 1.5;
+  }
+  header {
+    background: linear-gradient(135deg, #d4a373 0%, #c9886a 100%);
+    color: #fff;
+    padding: 48px 24px 36px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  }
+  header h1 {
+    font-size: 32px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    margin-bottom: 8px;
+  }
+  header p {
+    font-size: 14px;
+    opacity: 0.92;
+    letter-spacing: 1px;
+  }
+  .controls {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 24px 8px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .filter-btn {
+    padding: 8px 18px;
+    border: 1.5px solid #d4a373;
+    background: #fff;
+    color: #c9886a;
+    border-radius: 999px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: inherit;
+  }
+  .filter-btn:hover { background: #fef5ec; }
+  .filter-btn.active {
+    background: #c9886a;
+    color: #fff;
+    border-color: #c9886a;
+  }
+  .search-box {
+    padding: 8px 16px;
+    border: 1.5px solid #e0d3c2;
+    border-radius: 999px;
+    font-size: 14px;
+    font-family: inherit;
+    background: #fff;
+    min-width: 220px;
+  }
+  .download-btn {
+    padding: 10px 22px;
+    background: #2b2b2b;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: inherit;
+    letter-spacing: 1px;
+  }
+  .download-btn:hover { background: #444; }
+  .stats {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 8px 24px 16px;
+    font-size: 13px;
+    color: #8a7766;
+    letter-spacing: 1px;
+  }
+  .grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 16px 24px 64px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 20px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    transition: transform 0.25s, box-shadow 0.25s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+  }
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  }
+  .card-img-wrap {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    overflow: hidden;
+    background: #f0e8df;
+  }
+  .card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s;
+  }
+  .card:hover .card-img-wrap img { transform: scale(1.06); }
+  .badge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: rgba(255,255,255,0.92);
+    color: #c9886a;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    backdrop-filter: blur(8px);
+  }
+  .badge-num {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0,0,0,0.55);
+    color: #fff;
+    padding: 4px 9px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    backdrop-filter: blur(8px);
+  }
+  .card-body {
+    padding: 14px 16px 16px;
+  }
+  .card-name {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #2b2b2b;
+  }
+  .card-query {
+    font-size: 11px;
+    color: #aa9484;
+    letter-spacing: 0.5px;
+  }
+  .empty {
+    text-align: center;
+    padding: 48px 16px;
+    color: #aa9484;
+    grid-column: 1 / -1;
+  }
+  #toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2b2b2b;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 999px;
+    font-size: 13px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    pointer-events: none;
+    z-index: 1000;
+  }
+  #toast.show { opacity: 1; }
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: #aa9484;
+    font-size: 12px;
+    background: #f3ece3;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>100 個禮物靈感</h1>
+  <p>WEDDING · FESTIVAL · SEASON · OCCASION</p>
+</header>
+
+<div class="controls">
+  <div class="filters" id="filters">
+    <button class="filter-btn active" data-cat="全部">全部 (100)</button>
+    <button class="filter-btn" data-cat="婚禮">婚禮 (55)</button>
+    <button class="filter-btn" data-cat="節慶">節慶 (20)</button>
+    <button class="filter-btn" data-cat="季節">季節 (10)</button>
+    <button class="filter-btn" data-cat="活動">活動 (15)</button>
+  </div>
+  <input type="text" id="search" class="search-box" placeholder="搜尋禮物名稱…">
+  <button class="download-btn" id="downloadAll">下載全部圖片</button>
+</div>
+
+<div class="stats" id="stats">顯示 100 項禮物</div>
+
+<div class="grid" id="grid"></div>
+
+<div id="toast"></div>
+
+<footer>
+  圖片來源 Pinterest · 100 件禮物精選 · 2026.05.27
+</footer>
+
+<script>
+const gifts = [
+  {"id":1,"name":"婚禮對戒","category":"婚禮","query":"wedding rings pair","url":"https://i.pinimg.com/736x/9d/17/c8/9d17c8e54fddd87fd0e9d7b377e8eeb1.jpg"},
+  {"id":2,"name":"新娘捧花","category":"婚禮","query":"bridal bouquet","url":"https://i.pinimg.com/736x/52/1a/38/521a3834b73cfd21a8b75a8859a3feb3.jpg"},
+  {"id":3,"name":"婚紗禮服","category":"婚禮","query":"wedding dress","url":"https://i.pinimg.com/736x/20/02/1b/20021b642cc1c9d1a65a692a0f5d131e.jpg"},
+  {"id":4,"name":"新郎西裝","category":"婚禮","query":"groom suit wedding","url":"https://i.pinimg.com/736x/21/4e/07/214e07c61d94a49048190f1ee0c0d432.jpg"},
+  {"id":5,"name":"新娘頭紗","category":"婚禮","query":"wedding veil bridal","url":"https://i.pinimg.com/736x/3d/c7/de/3dc7de446d76b38955402fb9ed473541.jpg"},
+  {"id":6,"name":"戒枕","category":"婚禮","query":"wedding ring pillow","url":"https://i.pinimg.com/736x/44/24/b1/4424b1aac5dcb46cbfdf2ce4c1b92ccc.jpg"},
+  {"id":7,"name":"婚禮喜帖","category":"婚禮","query":"wedding invitation card","url":"https://i.pinimg.com/736x/9a/90/48/9a9048081d45843642477acb7b009d0e.jpg"},
+  {"id":8,"name":"婚禮蛋糕","category":"婚禮","query":"wedding cake elegant","url":"https://i.pinimg.com/736x/50/93/24/509324dff475f79e11f0420f8730173d.jpg"},
+  {"id":9,"name":"香檳對杯","category":"婚禮","query":"wedding champagne glasses pair","url":"https://i.pinimg.com/736x/42/ad/6a/42ad6a74919468e217c35d0fe8f0e961.jpg"},
+  {"id":10,"name":"婚禮回禮餅乾","category":"婚禮","query":"wedding cookies favors","url":"https://i.pinimg.com/736x/fb/88/5e/fb885eb3636c65f60642c6ab6d5562dc.jpg"},
+  {"id":11,"name":"婚禮喜糖盒","category":"婚禮","query":"wedding candy box favors","url":"https://i.pinimg.com/736x/3e/a9/dd/3ea9dd78b31f469ec9f6b91949aa0c76.jpg"},
+  {"id":12,"name":"婚禮回禮香皂","category":"婚禮","query":"wedding favor soap","url":"https://i.pinimg.com/736x/a4/c8/b2/a4c8b2291a92b0e46f09b8a80f97a123.jpg"},
+  {"id":13,"name":"訂婚對杯","category":"婚禮","query":"engagement couple cups","url":"https://i.pinimg.com/736x/36/1d/15/361d15a8872a1bf6d25546a00b3f1ab0.jpg"},
+  {"id":14,"name":"結婚對枕","category":"婚禮","query":"couple pillow wedding gift","url":"https://i.pinimg.com/736x/99/03/6f/99036f6a333557ab0515a66214148a9b.jpg"},
+  {"id":15,"name":"結婚相框","category":"婚禮","query":"wedding photo frame","url":"https://i.pinimg.com/736x/f5/66/df/f566df8e6ae4e707a5dac612b62834fa.jpg"},
+  {"id":16,"name":"婚禮感謝卡","category":"婚禮","query":"wedding thank you card","url":"https://i.pinimg.com/736x/5d/47/ed/5d47edf85cf2730d18b8e8108b2a1f47.jpg"},
+  {"id":17,"name":"婚禮餐桌花藝","category":"婚禮","query":"wedding centerpiece flowers","url":"https://i.pinimg.com/736x/51/de/62/51de6235036a8ce665cc6c2db32cfe7c.jpg"},
+  {"id":18,"name":"新娘髮飾","category":"婚禮","query":"bridal hair accessory","url":"https://i.pinimg.com/736x/4f/9a/ff/4f9aff637c8ba2d40b2c52efd7d98aeb.jpg"},
+  {"id":19,"name":"婚禮蠟燭","category":"婚禮","query":"wedding pillar candles","url":"https://i.pinimg.com/736x/e5/02/e7/e502e78b4c2fe67f6f07fbe4c6106e01.jpg"},
+  {"id":20,"name":"婚禮座位卡","category":"婚禮","query":"wedding place card","url":"https://i.pinimg.com/736x/44/03/ec/4403ec1e47d4eb78c1727a650a5ae698.jpg"},
+  {"id":21,"name":"結婚紀念金飾","category":"婚禮","query":"wedding gold jewelry chinese","url":"https://i.pinimg.com/736x/da/68/e8/da68e873dd3aec45f861ccbc284484ed.jpg"},
+  {"id":22,"name":"新娘手套","category":"婚禮","query":"bridal gloves lace","url":"https://i.pinimg.com/736x/16/b9/62/16b962aed0973d1f15494d0eea9c0121.jpg"},
+  {"id":23,"name":"新郎胸花","category":"婚禮","query":"boutonniere groom","url":"https://i.pinimg.com/736x/79/5c/8d/795c8d804410ac3d3d2fbfcbce33d099.jpg"},
+  {"id":24,"name":"婚禮簽到本","category":"婚禮","query":"wedding guest book","url":"https://i.pinimg.com/736x/4e/c5/01/4ec501fdd29242719cf81e53628cf05b.jpg"},
+  {"id":25,"name":"結婚戒指盒","category":"婚禮","query":"wedding ring box velvet","url":"https://i.pinimg.com/736x/6a/79/64/6a7964d0ef3dbb1d70bf07308e9f47eb.jpg"},
+  {"id":26,"name":"婚禮蜜月行李箱","category":"婚禮","query":"honeymoon luggage set","url":"https://i.pinimg.com/736x/f6/92/06/f692067a6629af5ab7ddcd7975c1362c.jpg"},
+  {"id":27,"name":"單身派對禮品","category":"婚禮","query":"bachelorette party gift","url":"https://i.pinimg.com/736x/a0/62/6c/a0626c3601dff5ea9e4f92a499321714.jpg"},
+  {"id":28,"name":"婚禮香氛蠟燭","category":"婚禮","query":"wedding scented candle gift","url":"https://i.pinimg.com/736x/0c/c3/c2/0cc3c20a9e8d63eb6b745e7283f50bee.jpg"},
+  {"id":29,"name":"結婚紅包袋","category":"婚禮","query":"wedding red envelope chinese","url":"https://i.pinimg.com/736x/3a/68/93/3a68937b2c9d9796ebc3cadb1adde8fd.jpg"},
+  {"id":30,"name":"婚禮新人擺飾","category":"婚禮","query":"wedding figurine couple","url":"https://i.pinimg.com/736x/74/c9/11/74c91182851833b335beb90b010912d4.jpg"},
+  {"id":31,"name":"訂婚六禮","category":"婚禮","query":"chinese engagement gift box","url":"https://i.pinimg.com/736x/a8/5f/a3/a85fa3423cf71928d2cac5c392f82922.jpg"},
+  {"id":32,"name":"結婚對筷","category":"婚禮","query":"wedding chopsticks pair gift","url":"https://i.pinimg.com/736x/b2/0b/a6/b20ba64c303383723da24c5f6b78725c.jpg"},
+  {"id":33,"name":"婚禮喜餅","category":"婚禮","query":"wedding pastry gift box chinese","url":"https://i.pinimg.com/736x/8e/16/31/8e163149299a98f622c485627f83632c.jpg"},
+  {"id":34,"name":"婚禮紀念瓷器","category":"婚禮","query":"wedding porcelain set gift","url":"https://i.pinimg.com/736x/45/62/3f/45623f1ec16d292e23b41ba02bfb7f62.jpg"},
+  {"id":35,"name":"婚禮絲巾","category":"婚禮","query":"wedding silk scarf gift","url":"https://i.pinimg.com/736x/be/54/2b/be542bfa93440a8be267119eb13c35a4.jpg"},
+  {"id":36,"name":"婚禮對杯馬克","category":"婚禮","query":"couple mug wedding mr mrs","url":"https://i.pinimg.com/736x/33/7c/4d/337c4daf9daa2220090c256925affa63.jpg"},
+  {"id":37,"name":"結婚紀念手錶","category":"婚禮","query":"couple watch wedding gift","url":"https://i.pinimg.com/736x/ad/e1/14/ade114aa34425dbe559e5d48d8fc3090.jpg"},
+  {"id":38,"name":"蕾絲新娘手套","category":"婚禮","query":"lace bridal gloves wedding","url":"https://i.pinimg.com/736x/21/1a/ef/211aef5d423245de8f14523250974ba1.jpg"},
+  {"id":39,"name":"新娘珍珠項鍊","category":"婚禮","query":"pearl necklace bridal wedding","url":"https://i.pinimg.com/736x/d0/a8/66/d0a866cb469a08aea02e8bf3ea3d304c.jpg"},
+  {"id":40,"name":"婚禮迎賓花圈","category":"婚禮","query":"wedding welcome wreath","url":"https://i.pinimg.com/736x/d4/3d/be/d43dbe9431c1c7b521681484043016bc.jpg"},
+  {"id":41,"name":"婚禮對筆","category":"婚禮","query":"wedding signing pen set","url":"https://i.pinimg.com/736x/7d/cc/b9/7dccb9ed8cc61bf6eb7182415414e279.jpg"},
+  {"id":42,"name":"婚禮紀念畫","category":"婚禮","query":"wedding canvas art print","url":"https://i.pinimg.com/736x/07/f9/85/07f9858e316440536def523f8a24bb8e.jpg"},
+  {"id":43,"name":"新娘鞋","category":"婚禮","query":"bridal shoes wedding heels","url":"https://i.pinimg.com/736x/8e/d8/43/8ed843371d4e20cb48541caab4605e9b.jpg"},
+  {"id":44,"name":"新郎袖扣","category":"婚禮","query":"groom cufflinks wedding","url":"https://i.pinimg.com/736x/fe/cc/07/fecc07675e163961409113195793101e.jpg"},
+  {"id":45,"name":"新娘耳環","category":"婚禮","query":"bridal earrings wedding","url":"https://i.pinimg.com/736x/69/d1/61/69d161ab1e74403bda188d4d3dc2f8a5.jpg"},
+  {"id":46,"name":"新娘項鍊","category":"婚禮","query":"bridal necklace wedding","url":"https://i.pinimg.com/736x/8d/b4/e5/8db4e5f9eba30810399ae5b8069fb41b.jpg"},
+  {"id":47,"name":"花童花籃","category":"婚禮","query":"flower girl basket wedding","url":"https://i.pinimg.com/736x/fb/31/78/fb31783da22c29365bdf7239bca44f5a.jpg"},
+  {"id":48,"name":"蜜月旅行眼罩組","category":"婚禮","query":"honeymoon travel eye mask set","url":"https://i.pinimg.com/736x/f6/11/cb/f611cbb226fa23cd9d9b7a5f1ccfd292.jpg"},
+  {"id":49,"name":"婚禮紀念木刻","category":"婚禮","query":"wedding wood carving keepsake","url":"https://i.pinimg.com/736x/6d/b6/72/6db672297bb6ae11d57146cdd5f66b72.jpg"},
+  {"id":50,"name":"婚禮紀念相簿","category":"婚禮","query":"wedding photo album book","url":"https://i.pinimg.com/736x/77/3a/ea/773aea151e21a82925d91ee9d5ab15ec.jpg"},
+  {"id":51,"name":"婚禮拋花球","category":"婚禮","query":"wedding toss bouquet","url":"https://i.pinimg.com/736x/17/95/3e/17953ea737fe3ac12ebe78b27402617c.jpg"},
+  {"id":52,"name":"婚禮紅酒禮盒","category":"婚禮","query":"wedding red wine gift box","url":"https://i.pinimg.com/736x/09/b3/2e/09b32efd9349d0c157f96a6c070c6e36.jpg"},
+  {"id":53,"name":"婚禮絲質睡袍","category":"婚禮","query":"bridal silk robe bridesmaid","url":"https://i.pinimg.com/736x/21/a2/ed/21a2ed1f1f67ff49cefd9fcf4f8b9933.jpg"},
+  {"id":54,"name":"婚禮敬酒杯","category":"婚禮","query":"wedding toasting flutes","url":"https://i.pinimg.com/736x/55/73/52/557352c727e62fe490d0dafdf641aa6f.jpg"},
+  {"id":55,"name":"結婚禮金禮盒","category":"婚禮","query":"wedding money envelope gift","url":"https://i.pinimg.com/736x/51/95/b3/5195b3ea81314d824ce9d688b36a1d21.jpg"},
+  {"id":56,"name":"聖誕禮物盒","category":"節慶","query":"christmas gift box wrapped","url":"https://i.pinimg.com/736x/95/ba/05/95ba051c51604ccfee748a7d5dc28eb9.jpg"},
+  {"id":57,"name":"聖誕薑餅屋","category":"節慶","query":"gingerbread house christmas","url":"https://i.pinimg.com/736x/49/04/bd/4904bdc8dc94c9a923e7e5d955ad98cc.jpg"},
+  {"id":58,"name":"聖誕襪","category":"節慶","query":"christmas stocking gift","url":"https://i.pinimg.com/736x/92/c3/d2/92c3d2bd3cec0935461c6cb04ea54386.jpg"},
+  {"id":59,"name":"聖誕花圈","category":"節慶","query":"christmas wreath door","url":"https://i.pinimg.com/736x/73/3e/fe/733efed31b5b9e43b57cea21219795b5.jpg"},
+  {"id":60,"name":"春節紅包袋","category":"節慶","query":"chinese new year red envelope","url":"https://i.pinimg.com/736x/b4/28/13/b428131f19d3af54e9881a1aa428be49.jpg"},
+  {"id":61,"name":"春節禮盒","category":"節慶","query":"chinese new year gift box","url":"https://i.pinimg.com/736x/5e/da/c3/5edac3fd0c18f0a51280b1dffc9d1f68.jpg"},
+  {"id":62,"name":"元宵燈籠","category":"節慶","query":"lantern festival chinese","url":"https://i.pinimg.com/736x/c1/aa/36/c1aa36510ae94c0b127fbacfca4c8859.jpg"},
+  {"id":63,"name":"端午粽子禮盒","category":"節慶","query":"zongzi gift box dragon boat","url":"https://i.pinimg.com/736x/85/ab/f0/85abf0b0958dac208ab9c9eab1f1d648.jpg"},
+  {"id":64,"name":"中秋月餅禮盒","category":"節慶","query":"mooncake gift box","url":"https://i.pinimg.com/736x/dd/a5/92/dda592c0a04a16c619473204a891e73a.jpg"},
+  {"id":65,"name":"中秋柚子禮盒","category":"節慶","query":"pomelo mid autumn gift box","url":"https://i.pinimg.com/736x/a8/ec/44/a8ec447653a86595cf86d521e7743553.jpg"},
+  {"id":66,"name":"情人節玫瑰花束","category":"節慶","query":"valentine roses bouquet","url":"https://i.pinimg.com/736x/83/5b/d5/835bd573e4421e7deb7732cca64795a1.jpg"},
+  {"id":67,"name":"情人節巧克力禮盒","category":"節慶","query":"valentine chocolate gift box","url":"https://i.pinimg.com/736x/97/2b/c1/972bc1da9b65bf6a483a6c8711d1af6a.jpg"},
+  {"id":68,"name":"母親節康乃馨","category":"節慶","query":"mother's day carnation bouquet","url":"https://i.pinimg.com/736x/1b/5b/41/1b5b411016efae6b1f22279d84176fcf.jpg"},
+  {"id":69,"name":"父親節領帶","category":"節慶","query":"father's day necktie gift","url":"https://i.pinimg.com/736x/82/c7/26/82c726a11ed8ef046370ac76280e6fd1.jpg"},
+  {"id":70,"name":"復活節彩蛋禮盒","category":"節慶","query":"easter egg gift basket","url":"https://i.pinimg.com/736x/72/81/ef/7281ef78cffd4a817a5f9581cc1a355f.jpg"},
+  {"id":71,"name":"萬聖節糖果籃","category":"節慶","query":"halloween candy basket","url":"https://i.pinimg.com/736x/de/96/c7/de96c7a30d8255e53db617f02eabba31.jpg"},
+  {"id":72,"name":"感恩節禮籃","category":"節慶","query":"thanksgiving gift basket","url":"https://i.pinimg.com/736x/a9/be/6d/a9be6d43f5caa2748c96116fca031590.jpg"},
+  {"id":73,"name":"七夕情侶手鍊","category":"節慶","query":"couple bracelet valentine","url":"https://i.pinimg.com/736x/2e/08/65/2e086504ae5f5fef5a9743d83b7156ab.jpg"},
+  {"id":74,"name":"跨年香檳禮盒","category":"節慶","query":"new year champagne gift","url":"https://i.pinimg.com/736x/cc/b7/44/ccb744d15af8ba2ed7cb0f842f572b71.jpg"},
+  {"id":75,"name":"兒童節玩具禮","category":"節慶","query":"children's day toy gift","url":"https://i.pinimg.com/736x/2d/ff/e3/2dffe3407c2abb2eae3f8859d2381296.jpg"},
+  {"id":76,"name":"春季花束","category":"季節","query":"spring flower bouquet pastel","url":"https://i.pinimg.com/736x/e1/38/43/e138434cf8299629c10adc9fe03b3332.jpg"},
+  {"id":77,"name":"夏季水果禮盒","category":"季節","query":"summer fruit gift basket","url":"https://i.pinimg.com/736x/61/ee/98/61ee9888933bc901bce362d2d0d03513.jpg"},
+  {"id":78,"name":"秋季楓葉禮","category":"季節","query":"autumn maple leaf gift","url":"https://i.pinimg.com/736x/c8/61/bb/c861bb7c5ab5bd0dbed7183dbf3c290f.jpg"},
+  {"id":79,"name":"冬季羊毛圍巾","category":"季節","query":"winter wool scarf gift","url":"https://i.pinimg.com/736x/5f/b7/a0/5fb7a06319fbbde38a8ce80441093223.jpg"},
+  {"id":80,"name":"春季野餐籃","category":"季節","query":"spring picnic basket gift","url":"https://i.pinimg.com/736x/14/3c/7b/143c7b32747bf436094bdfd538886bb1.jpg"},
+  {"id":81,"name":"夏季沁涼禮盒","category":"季節","query":"summer ice cream gift box","url":"https://i.pinimg.com/736x/51/78/ac/5178acffedbfae0c67784ace8f68b676.jpg"},
+  {"id":82,"name":"秋季栗子禮盒","category":"季節","query":"autumn chestnut gift box","url":"https://i.pinimg.com/736x/97/14/20/9714203a15b18b71869b845faff8b951.jpg"},
+  {"id":83,"name":"冬季暖暖禮盒","category":"季節","query":"winter warm cozy gift box","url":"https://i.pinimg.com/736x/15/ff/9a/15ff9ab6d50b6d607b48427ee00e78d8.jpg"},
+  {"id":84,"name":"春季新茶禮盒","category":"季節","query":"spring tea gift box","url":"https://i.pinimg.com/736x/a5/50/5b/a5505baf06e899f60f80313c13d0934c.jpg"},
+  {"id":85,"name":"冬季熱可可禮","category":"季節","query":"hot cocoa gift set winter","url":"https://i.pinimg.com/736x/90/6b/8d/906b8d097bdb23f4814f01af20ce2316.jpg"},
+  {"id":86,"name":"生日蛋糕","category":"活動","query":"birthday cake elegant","url":"https://i.pinimg.com/736x/69/12/9f/69129f58e188baf3e48be60a0ef6783f.jpg"},
+  {"id":87,"name":"生日禮物盒","category":"活動","query":"birthday present wrapped ribbon","url":"https://i.pinimg.com/736x/8f/14/0a/8f140a402a098db182f7e1b7fb4c164c.jpg"},
+  {"id":88,"name":"彌月油飯禮盒","category":"活動","query":"baby one month gift box","url":"https://i.pinimg.com/736x/30/af/b4/30afb4e54fc9673541a0f79bc9988acb.jpg"},
+  {"id":89,"name":"彌月蛋糕","category":"活動","query":"baby shower cake","url":"https://i.pinimg.com/736x/56/0c/22/560c2215c5a02df1ebe3b197423dc863.jpg"},
+  {"id":90,"name":"週歲抓周","category":"活動","query":"baby first birthday gift","url":"https://i.pinimg.com/736x/b0/94/6c/b0946c641186007900db79b616b6aa7d.jpg"},
+  {"id":91,"name":"畢業花束","category":"活動","query":"graduation flower bouquet","url":"https://i.pinimg.com/736x/6f/46/89/6f468999f8bbdd2b3c6f4095b426998c.jpg"},
+  {"id":92,"name":"畢業禮盒","category":"活動","query":"graduation gift box","url":"https://i.pinimg.com/736x/84/b6/71/84b67136fca6a9a159efb1ba7530451a.jpg"},
+  {"id":93,"name":"升遷祝賀花籃","category":"活動","query":"congratulations flower basket","url":"https://i.pinimg.com/736x/b3/11/8a/b3118ab29ecfc4b9136a2a97db9f72f2.jpg"},
+  {"id":94,"name":"入厝禮","category":"活動","query":"housewarming gift basket","url":"https://i.pinimg.com/736x/16/55/69/16556975ce5d0354e5b8468b6547a72a.jpg"},
+  {"id":95,"name":"探病禮籃","category":"活動","query":"get well soon gift basket","url":"https://i.pinimg.com/736x/67/41/ab/6741aba65098c10d8e9461733e561d42.jpg"},
+  {"id":96,"name":"退休紀念禮","category":"活動","query":"retirement gift elegant","url":"https://i.pinimg.com/736x/65/15/87/65158751a404333ceeef769f277d8a61.jpg"},
+  {"id":97,"name":"寵物生日禮","category":"活動","query":"pet birthday gift dog cat","url":"https://i.pinimg.com/736x/a3/b5/00/a3b5004cb85c2004bfdf6e8500643cb9.jpg"},
+  {"id":98,"name":"情侶對戒","category":"活動","query":"couple rings promise","url":"https://i.pinimg.com/736x/86/52/89/865289b4e2fc7d6f1e066d288db38632.jpg"},
+  {"id":99,"name":"紀念日香水禮","category":"活動","query":"anniversary perfume gift","url":"https://i.pinimg.com/736x/8f/b6/c4/8fb6c4834a4b1cd43777a2f43ad731d5.jpg"},
+  {"id":100,"name":"周年紀念珠寶盒","category":"活動","query":"anniversary jewelry box gift","url":"https://i.pinimg.com/736x/79/94/31/799431fafa2c1e9b50706aa19506b818.jpg"}
+];
+
+const gridEl = document.getElementById('grid');
+const statsEl = document.getElementById('stats');
+const searchEl = document.getElementById('search');
+const filtersEl = document.getElementById('filters');
+const toastEl = document.getElementById('toast');
+
+let currentCategory = '全部';
+let currentSearch = '';
+
+function render() {
+  const filtered = gifts.filter(g => {
+    const catMatch = currentCategory === '全部' || g.category === currentCategory;
+    const searchMatch = !currentSearch || g.name.includes(currentSearch) || g.query.toLowerCase().includes(currentSearch.toLowerCase());
+    return catMatch && searchMatch;
+  });
+  statsEl.textContent = `顯示 ${filtered.length} 項禮物`;
+  if (filtered.length === 0) {
+    gridEl.innerHTML = '<div class="empty">沒有符合的禮物</div>';
+    return;
+  }
+  gridEl.innerHTML = filtered.map(g => `
+    <div class="card" data-id="${g.id}" onclick="openOriginal('${g.url}')">
+      <div class="card-img-wrap">
+        <img src="${g.url}" alt="${g.name}" loading="lazy" referrerpolicy="no-referrer">
+        <span class="badge">${g.category}</span>
+        <span class="badge-num">#${String(g.id).padStart(3,'0')}</span>
+      </div>
+      <div class="card-body">
+        <div class="card-name">${g.name}</div>
+        <div class="card-query">${g.query}</div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function openOriginal(url) {
+  window.open(url, '_blank');
+}
+
+function showToast(msg) {
+  toastEl.textContent = msg;
+  toastEl.classList.add('show');
+  clearTimeout(window._toastTimer);
+  window._toastTimer = setTimeout(() => toastEl.classList.remove('show'), 2400);
+}
+
+filtersEl.addEventListener('click', e => {
+  if (e.target.classList.contains('filter-btn')) {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    e.target.classList.add('active');
+    currentCategory = e.target.dataset.cat;
+    render();
+  }
+});
+
+searchEl.addEventListener('input', e => {
+  currentSearch = e.target.value.trim();
+  render();
+});
+
+// Bulk download - triggered by user click so Chrome allows multi-download permission prompt
+async function downloadAll() {
+  showToast('開始下載 100 張圖片，請允許 Chrome 多重下載權限');
+  let success = 0, failed = 0;
+  for (const g of gifts) {
+    try {
+      const resp = await fetch(g.url, {mode: 'cors', referrerPolicy: 'no-referrer'});
+      const blob = await resp.blob();
+      const blobUrl = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = blobUrl;
+      a.download = `${String(g.id).padStart(3,'0')}_${g.name}.jpg`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(blobUrl), 3000);
+      success++;
+      if (g.id % 10 === 0) showToast(`已下載 ${success} / 100…`);
+      await new Promise(r => setTimeout(r, 300));
+    } catch (e) {
+      failed++;
+      console.error('Failed:', g.id, e);
+    }
+  }
+  showToast(`完成！成功 ${success} 失敗 ${failed}`);
+}
+
+document.getElementById('downloadAll').addEventListener('click', downloadAll);
+
+render();
+</script>
+
+</body>
+</html>
